@@ -1,0 +1,32 @@
+{
+  "AI Engineer": {
+    "description": "Experience in machine learning, deep learning, LLMs, AI systems.",
+    "keywords": ["machine learning", "deep learning", "neural networks", "LLM", "AI", "PyTorch", "TensorFlow"],
+    "category": "Engineering"
+  },
+  "Data Analyst": {
+    "description": "Skilled in SQL, Excel, BI tools, data visualization.",
+    "keywords": ["SQL", "Excel", "Power BI", "Tableau", "data cleaning", "dashboard", "ETL"],
+    "category": "Analytics"
+  },
+  "Software Developer": {
+    "description": "Strong coding skills in Java, Python, full stack web development.",
+    "keywords": ["Java", "Python", "React", "Node.js", "Django", "Flask", "Git", "API"],
+    "category": "Engineering"
+  },
+  "Accountant": {
+    "description": "Expertise in financial reporting, ledger management, auditing, and compliance.",
+    "keywords": ["ledger", "audit", "GAAP", "CPA", "reconciliation", "journal entry", "tax"],
+    "category": "Finance"
+  },
+  "Project Manager": {
+    "description": "Experienced in planning, budgeting, team coordination, and project delivery.",
+    "keywords": ["Gantt chart", "milestone", "budget", "risk", "stakeholder", "timeline", "Scrum", "Agile"],
+    "category": "Management"
+  },
+  "Other": {
+    "description": "General IT or unrelated experience.",
+    "keywords": [],
+    "category": "Miscellaneous"
+  }
+}
