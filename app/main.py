@@ -1,10 +1,10 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import io
+import os
 import pdfplumber
 from docx import Document
 from scripts.classifier import classify_resume
 import joblib
-import os
 
 app = FastAPI()
 
@@ -15,11 +15,15 @@ model = None
 def load_model():
     global model
     if os.path.exists(MODEL_PATH):
-        model = joblib.load(MODEL_PATH)
-        print("✅ Model loaded from model.pkl")
+        try:
+            model = joblib.load(MODEL_PATH)
+            print("✅ model.pkl loaded successfully")
+        except Exception as e:
+            print(f"❌ Failed to load model.pkl: {e}")
+            model = None
     else:
-        model = None
         print("⚠️ model.pkl not found. Using embedding-based fallback.")
+        model = None
 
 load_model()
 
@@ -53,19 +57,18 @@ async def classify(file: UploadFile = File(...)):
     contents = await file.read()
     resume_text = extract_file(contents, ext)
 
-    # 🧠 Use enhanced classifier
+    print(f"📥 Received file: {file.filename}")
+
     result = classify_resume(resume_text, top_n=3, model=model)
 
     return {
+        "filename": file.filename,
         "label": result["label"],
         "confidence": float(result["confidence"]),
-        "top_matches": {k: float(v) for k, v in result["top_matches"].items()},
-        "similarities": {k: float(v) for k, v in result["similarities"].items()},
-        "matched_keywords": result["matched_keywords"],
-        "categories": result["categories"]
+        "top_matches": {k: float(v) for k, v in result["top_matches"].items()}
     }
 
-# --- Optional: Reload Model Endpoint ---
+# --- Reload Model Endpoint ---
 @app.get("/reload-model")
 def reload_model():
     try:
@@ -73,3 +76,9 @@ def reload_model():
         return {"status": "✅ Model reloaded successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# --- Uvicorn Entry Point for Render ---
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
